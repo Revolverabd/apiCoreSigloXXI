@@ -4,6 +4,7 @@
   "description": "Api para restaurant xxi creada en nodeJS",
   "main": "app.js",
   "scripts": {
+    "start": "node app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Ignacio Jara Pedro Briceño",
