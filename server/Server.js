@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 
+// const { openConnection } = require('../config/dbCnnConfig');
+
 class Server {
 
     constructor() {
@@ -21,7 +23,7 @@ class Server {
         this.app.use(cors());
 
         //lectura y parsei del body
-        this.app.use( express.json());
+        this.app.use(express.json());
 
         // Directorio Público
         this.app.use(express.static('public'));
