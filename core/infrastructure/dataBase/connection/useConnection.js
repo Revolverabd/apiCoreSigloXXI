@@ -1,12 +1,12 @@
 const { openConnection } = require('../../../config/dbCnnConfig');
 
-const runQuery = async (sql, binds, options) => {
+const runQuery = async (sql, binds, autoCommit) => {
 
     try {
 
-        let connection = await openConnection();
+        const connection = await openConnection();
         console.log('open connection');
-        let result = await connection.execute(sql, binds, { options });
+        const result = await connection.execute(sql, binds, { autoCommit });
         connection.release();
         console.log('close connection');
         return result;

@@ -3,51 +3,58 @@ const { Schema, model } = require('mongoose');
 const message = 'Es requerido';
 
 const EmpleadoSquema = Schema({
-
-    rut: {
+    Id: {
+        type: Number
+    },
+    Rut: {
         type: String,
         required: [true, `rut ${message}`]
 
     },
-    nombre: {
+    Nombre: {
         type: String,
         required: [true, `nombre ${message}`]
 
     },
-    apellidoMaterno: {
+    ApellidoMaterno: {
         type: String,
         required: [true, `apellidoMaterno ${message}`]
 
     },
-    apellidoPaterno: {
+    ApellidoPaterno: {
         type: String,
         required: [true, `apellidoPaterno ${message}`]
 
     },
-    correo: {
+    Correo: {
         type: String,
         required: [true, `correo ${message}`]
 
     },
-    telefono: {
+    Telefono: {
         type: String,
         required: [true, `telefono ${message}`]
 
     },
-    contrasenia: {
+    Contrasenia: {
         type: String,
         required: [true, `contrasenia ${message}`]
 
     },
-    estadoEmpleado: {
+    EstadoEmpleado: {
         type: Number,
         required: [true, `contrasenia ${message}`]
     },
-    rol: {
+    Rol: {
         type: Number,
         required: [true, `contrasenia ${message}`]
     }
 
 });
+
+EmpleadoSquema.methods.toJSON = function () {
+    const { __v, Contrasenia, _id, ...empleado } = this.toObject();
+    return empleado;
+}
 
 module.exports = model('Empleado', EmpleadoSquema);

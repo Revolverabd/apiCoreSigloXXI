@@ -1,49 +1,55 @@
 const bcryptjs = require('bcryptjs');
 
 const Empleado = require('../core/models/Empleado');
-const { empleadosGetService,
+
+const {
+    empleadosGetService,
     createEmpleadoService,
     updateEmpleadoByIdService,
     deleteEmpleadoByIdService,
-    updateAnEmpleadoByIdService,
-    consultCorreo } = require('../core/services/empleado.service');
+    activateEmpleadoByIdService
+} = require('../core/services/empleado.service');
 
 
-const empleadosGet = (req, res) => {
+const empleadosGet = async (req, res) => {
 
-    res.json({
-        msg: 'get'
-    });
+    try {
+
+        const result = await empleadosGetService();
+        res.json(result);
+
+    } catch (error) {
+
+        throw new Error(error);
+
+    }
+
+
 };
+
+const empleadosGetByCampo = async (req, res) => {
+
+    const result = await empleadosGetService();
+
+    res.json(result);
+
+};
+
 
 const createEmpleado = async (req, res) => {
 
     try {
 
-        const { rut, nombre, apellidoMaterno, apellidoPaterno, correo, telefono, contrasenia, estadoEmpleado, rol } = req.body;
-        const empleado = new Empleado({ rut, nombre, apellidoMaterno, apellidoPaterno, correo, telefono, contrasenia, estadoEmpleado, rol });
+        const { Rut, Nombre, ApellidoMaterno, ApellidoPaterno, Correo, Telefono, Contrasenia, Rol } = req.body;
+        const empleado = new Empleado({ Rut, Nombre, ApellidoMaterno, ApellidoPaterno, Correo, Telefono, Contrasenia, Rol });
 
         //encriptacion de la contraseña
         const salt = bcryptjs.genSaltSync();
-        empleado.contrasenia = bcryptjs.hashSync(contrasenia, salt);
+        empleado.Contrasenia = bcryptjs.hashSync(Contrasenia, salt);
 
-        //verificacion de correo exitente
-        const { resultCorreo } = await consultCorreo(correo);
+        await createEmpleadoService(empleado);
 
-        if (resultCorreo != null) {
-
-            return res.status(400).json({
-                msg: 'El correo ya existe'
-            });
-
-        }
-        
-        result
-        const result = await createEmpleadoService(empleado);
-
-        res.json({
-            result
-        });
+        res.json({ msg: 'OK' });
 
     } catch (error) {
 
@@ -53,32 +59,72 @@ const createEmpleado = async (req, res) => {
 
 };
 
-const updateEmpleadoById = (req, res) => {
+const updateEmpleadoById = async (req, res) => {
 
-    const id = req.params.id;
+    try {
 
-    res.json({
-        msg: 'put',
-        id
-    });
+        const { id } = req.params;
+        const { Nombre, ApellidoMaterno, ApellidoPaterno, Correo, Telefono, Contrasenia, EstadoEmpleado, Rol } = req.body;
+        const empleado = new Empleado({ Nombre, ApellidoMaterno, ApellidoPaterno, Correo, Telefono, Contrasenia, EstadoEmpleado, Rol });
+
+        const salt = bcryptjs.genSaltSync();
+        empleado.Contrasenia = bcryptjs.hashSync(Contrasenia, salt);
+
+        await updateEmpleadoByIdService(empleado, id);
+
+        res.json({ msg: 'OK' });
+
+    } catch (error) {
+
+        throw new Error(error);
+
+    }
+
 };
 
-const deleteEmpleadoById = (req, res) => {
-    res.json({
-        msg: 'delete'
-    });
+const deleteEmpleadoById = async (req, res) => {
+
+    try {
+        
+        const { id } = req.params;
+    
+        await deleteEmpleadoByIdService(id);
+    
+        res.json({ msg: 'OK' });
+
+    } catch (error) {
+
+        throw new Error(error);
+    
+    }
+
 };
 
-const updateAnEmpleadoById = (req, res) => {
-    res.json({
-        msg: 'patch'
-    });
+const activateEmpleadoById = async (req, res) => {
+
+    try {
+        
+        const { id } = req.params;
+    
+        await activateEmpleadoByIdService(id);
+    
+        res.json({ msg: 'OK' });
+
+    } catch (error) {
+
+        throw new Error(error);
+    
+    }
+
 };
+
 
 module.exports = {
     empleadosGet,
     createEmpleado,
     updateEmpleadoById,
     deleteEmpleadoById,
-    updateAnEmpleadoById
+    empleadosGetByCampo,
+    activateEmpleadoById
+    
 }

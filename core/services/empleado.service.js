@@ -1,11 +1,17 @@
-const { saveEmpleadodb
-    , getCorreoEmpleado } = require('../infrastructure/dataBase/daoEmpleadodb');
+const { saveEmpleadodb,
+    updateEmpleadodb,
+    getEmpleados,
+    softDeleteEmpleadodb,
+    softActivateEmpleadodb
+} = require('../infrastructure/dataBase/daoEmpleadodb');
 
 
-const empleadosGetService = async (dataEmpleado) => {
+const empleadosGetService = async () => {
 
     try {
 
+        const result = await getEmpleados();
+        return result;
 
     } catch (error) {
 
@@ -20,8 +26,7 @@ const createEmpleadoService = async (empleado) => {
 
     try {
 
-        const result = await saveEmpleadodb(empleado);
-        return result;
+        await saveEmpleadodb(empleado);
 
     } catch (error) {
 
@@ -30,12 +35,11 @@ const createEmpleadoService = async (empleado) => {
 
 };
 
-const consultCorreo = async (correo) => {
+const updateEmpleadoByIdService = async (empleado, id) => {
 
     try {
 
-        const correoDb = await getCorreoEmpleado(correo);
-        return correoDb;
+        await updateEmpleadodb(empleado, id);
 
     } catch (error) {
 
@@ -44,20 +48,33 @@ const consultCorreo = async (correo) => {
 
 };
 
+const deleteEmpleadoByIdService = async (id) => {
 
+    try {
 
-const updateEmpleadoByIdService = () => {
+        await softDeleteEmpleadodb(id);
+
+    } catch (error) {
+
+        throw new Error(error);
+
+    }
 
 };
 
-const deleteEmpleadoByIdService = () => {
+const activateEmpleadoByIdService = async (id) => {
+
+    try {
+
+        await softActivateEmpleadodb(id);
+
+    } catch (error) {
+
+        throw new Error(error);
+
+    }
 
 };
-
-const updateAnEmpleadoByIdService = () => {
-
-};
-
 
 
 module.exports = {
@@ -65,6 +82,5 @@ module.exports = {
     createEmpleadoService,
     updateEmpleadoByIdService,
     deleteEmpleadoByIdService,
-    updateAnEmpleadoByIdService,
-    consultCorreo
+    activateEmpleadoByIdService
 }
