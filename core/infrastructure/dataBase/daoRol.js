@@ -2,7 +2,6 @@ const oracledb = require('oracledb');
 
 const { runQuery } = require('./connection/useConnection');
 
-
 const getIdRol = async (rol) => {
 
     sql = `BEGIN SP_GETROL(:rol, :resultRol); END;`

@@ -1,6 +1,11 @@
-const { saveEmpleadodb,
-    updateEmpleadodb,
+const Empleado = require('../models/Empleado');
+const { encryptContraseñia } = require('../common/encrypt');
+
+const { 
     getEmpleados,
+    getEmpleadosCampo,
+    saveEmpleadodb,
+    updateEmpleadodb,
     softDeleteEmpleadodb,
     softActivateEmpleadodb
 } = require('../infrastructure/dataBase/daoEmpleadodb');
@@ -14,64 +19,86 @@ const empleadosGetService = async () => {
         return result;
 
     } catch (error) {
-
+        console.log(error);
         throw new Error();
-
     }
 
 
 };
 
-const createEmpleadoService = async (empleado) => {
+const empleadosGetCampoService = async (campo) => {
 
     try {
 
+        const result = await getEmpleadosCampo(campo);
+        return result;
+
+    } catch (error) {
+        console.log(error);
+        throw new Error();
+    }
+
+};
+
+const createEmpleadoService = async (body) => {
+
+    try {
+
+        let empleado = new Empleado(body);
+
+        //encriptacion de la contraseña  
+        empleado.Contrasenia = await encryptContraseñia(empleado.Contrasenia);
+
+        //guardamos empleado
         await saveEmpleadodb(empleado);
 
     } catch (error) {
-
+        console.log(error);
         throw new Error(error);
     }
 
 };
 
-const updateEmpleadoByIdService = async (empleado, id) => {
+const updateEmpleadoByRutService = async (body, rut) => {
 
     try {
 
-        await updateEmpleadodb(empleado, id);
+        let empleado = new Empleado(body, rut);
+
+        //encriptacion de la contraseña  
+        empleado.Contrasenia = await encryptContraseñia(empleado.Contrasenia);
+
+        await updateEmpleadodb(empleado, rut);
 
     } catch (error) {
-
+        console.log(error);
         throw new Error(error);
     }
 
 };
 
-const deleteEmpleadoByIdService = async (id) => {
+const deleteEmpleadoByRutService = async (rut) => {
 
     try {
 
-        await softDeleteEmpleadodb(id);
+        await softDeleteEmpleadodb(rut);
 
     } catch (error) {
-
+        console.log(error);
         throw new Error(error);
-
     }
 
 };
 
-const activateEmpleadoByIdService = async (id) => {
+const activateEmpleadoByRutService = async (rut) => {
 
     try {
 
-        await softActivateEmpleadodb(id);
+        await softActivateEmpleadodb(rut);
 
     } catch (error) {
-
+        console.log(error);
         throw new Error(error);
-
     }
 
 };
@@ -79,8 +106,9 @@ const activateEmpleadoByIdService = async (id) => {
 
 module.exports = {
     empleadosGetService,
+    empleadosGetCampoService,
     createEmpleadoService,
-    updateEmpleadoByIdService,
-    deleteEmpleadoByIdService,
-    activateEmpleadoByIdService
+    updateEmpleadoByRutService,
+    deleteEmpleadoByRutService,
+    activateEmpleadoByRutService
 }

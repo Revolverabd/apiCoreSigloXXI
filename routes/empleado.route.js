@@ -4,22 +4,39 @@ const { check } = require('express-validator');
 const {
     empleadosGet,
     createEmpleado,
-    updateEmpleadoById,
-    deleteEmpleadoById,
+    updateEmpleadoByRut,
+    deleteEmpleadoByRut,
     empleadosGetByCampo,
-    activateEmpleadoById
+    activateEmpleadoByRut
 } = require('../controllers/empleado.controller');
 
-const { validateFields } = require('../middlewares/validateFields');
-const { isValidRole, correoExists, isValidId } = require('../helpers/dbValidator');
+const {
+    roleExists,
+    correoExists,
+    // idEmpleadoExists,
+    rutExists,
+    rutDoesNotExistDeactivate,
+    rutDoesNotExistActivate,
+    // isDeleted,
+    // isActivated
+} = require('../helpers');
+
+const {
+    validateJWT,
+    validateFields,
+    isAdminRol
+} = require('../middlewares');
+
 
 const router = Router();
 
-router.get('/', empleadosGet);
-router.get('/campo', empleadosGetByCampo);
+router.get('/all', empleadosGet);
 
-router.post('/', [
+router.get('/one/:campo', empleadosGetByCampo);
+
+router.post('/add', [
     check('Rut', 'El rut es obligatorio').not().isEmpty(),
+    check('Rut').custom(rutExists),
     check('Nombre', 'El nombre es obligatorio').not().isEmpty(),
     check('ApellidoMaterno', 'El apellido materno es obligatorio').not().isEmpty(),
     check('ApellidoPaterno', 'El apellido paterno es obligatorio').not().isEmpty(),
@@ -30,12 +47,12 @@ router.post('/', [
     check('Contrasenia', 'La contraseña es obligatoria').not().isEmpty(),
     check('Contrasenia', 'La contraseña debe tener minimo un largo de 6 digitos').isLength({ min: 6 }),
     check('Rol').not().isEmpty(),
-    check('Rol').custom(isValidRole),
+    check('Rol').custom(roleExists),
     validateFields
 ], createEmpleado);
 
-router.put('/:id', [
-    check('id').custom(isValidId),
+router.put('/upd/:rut', [
+    check('rut').custom(rutExists),
     check('Nombre', 'El nombre es obligatorio').not().isEmpty(),
     check('ApellidoMaterno', 'El apellido materno es obligatorio').not().isEmpty(),
     check('ApellidoPaterno', 'El apellido paterno es obligatorio').not().isEmpty(),
@@ -46,17 +63,24 @@ router.put('/:id', [
     check('Contrasenia', 'La contraseña debe tener minimo un largo de 6 digitos').isLength({ min: 6 }),
     check('EstadoEmpleado', 'El estado es obligatorio').not().isEmpty(),
     check('Rol', 'es obligatorio').not().isEmpty(),
-    check('Rol').custom(isValidRole),
+    check('Rol').custom(roleExists),
     validateFields
-], updateEmpleadoById);
+], updateEmpleadoByRut);
 
-router.delete('/:id', [
-    check('id').custom(isValidId),
-], deleteEmpleadoById);
+router.delete('/del/:rut', [
+    validateJWT,
+    isAdminRol,
+    check('rut').custom(rutDoesNotExistDeactivate),
+    // check('id').custom(idEmpleadoExists),
+    // check('id').custom(isDeleted),
+    validateFields
+], deleteEmpleadoByRut);
 
-router.put('/activate/:id', [
-    check('id').custom(isValidId),
-], activateEmpleadoById);
-
+router.put('/act/:rut', [
+    check('rut').custom(rutDoesNotExistActivate),
+    // check('id').custom(idEmpleadoExists),
+    // check('id').custom(isActivated),
+    validateFields
+], activateEmpleadoByRut);
 
 module.exports = router;

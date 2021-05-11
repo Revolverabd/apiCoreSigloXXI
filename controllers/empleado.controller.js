@@ -1,15 +1,12 @@
-const bcryptjs = require('bcryptjs');
-
-const Empleado = require('../core/models/Empleado');
 
 const {
     empleadosGetService,
+    empleadosGetCampoService,
     createEmpleadoService,
-    updateEmpleadoByIdService,
-    deleteEmpleadoByIdService,
-    activateEmpleadoByIdService
+    updateEmpleadoByRutService,
+    deleteEmpleadoByRutService,
+    activateEmpleadoByRutService
 } = require('../core/services/empleado.service');
-
 
 const empleadosGet = async (req, res) => {
 
@@ -19,101 +16,107 @@ const empleadosGet = async (req, res) => {
         res.json(result);
 
     } catch (error) {
-
+        console.log(error);
         throw new Error(error);
 
     }
-
 
 };
 
 const empleadosGetByCampo = async (req, res) => {
 
-    const result = await empleadosGetService();
 
-    res.json(result);
+    try {
+
+        const { campo } = req.params;
+
+        const result = await empleadosGetCampoService(campo);
+
+        if (!result.length > 0) {
+
+            const msg = res.json({ msg: 'Empleado no esxite en la DB' });
+            return msg;
+
+        }
+
+        res.json(result);
+
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);
+
+    }
 
 };
-
 
 const createEmpleado = async (req, res) => {
-
+    
     try {
 
-        const { Rut, Nombre, ApellidoMaterno, ApellidoPaterno, Correo, Telefono, Contrasenia, Rol } = req.body;
-        const empleado = new Empleado({ Rut, Nombre, ApellidoMaterno, ApellidoPaterno, Correo, Telefono, Contrasenia, Rol });
+        const body = req.body;
 
-        //encriptacion de la contraseña
-        const salt = bcryptjs.genSaltSync();
-        empleado.Contrasenia = bcryptjs.hashSync(Contrasenia, salt);
-
-        await createEmpleadoService(empleado);
+        await createEmpleadoService(body);
 
         res.json({ msg: 'OK' });
 
     } catch (error) {
+        console.log(error);
+        throw new Error(error);
+    }
 
+};
+
+const updateEmpleadoByRut = async (req, res) => {
+    
+    try {
+
+        const { rut } = req.params;
+        const body = req.body;
+
+        await updateEmpleadoByRutService(body, rut);
+
+        res.json({ msg: 'OK' });
+
+    } catch (error) {
+        console.log(error);
         throw new Error(error);
 
     }
 
 };
 
-const updateEmpleadoById = async (req, res) => {
-
+const deleteEmpleadoByRut = async (req, res) => {
+    
     try {
 
-        const { id } = req.params;
-        const { Nombre, ApellidoMaterno, ApellidoPaterno, Correo, Telefono, Contrasenia, EstadoEmpleado, Rol } = req.body;
-        const empleado = new Empleado({ Nombre, ApellidoMaterno, ApellidoPaterno, Correo, Telefono, Contrasenia, EstadoEmpleado, Rol });
+        const { rut } = req.params;
 
-        const salt = bcryptjs.genSaltSync();
-        empleado.Contrasenia = bcryptjs.hashSync(Contrasenia, salt);
-
-        await updateEmpleadoByIdService(empleado, id);
+        await deleteEmpleadoByRutService(rut);
 
         res.json({ msg: 'OK' });
 
     } catch (error) {
-
+        console.log(error);
         throw new Error(error);
 
     }
 
 };
 
-const deleteEmpleadoById = async (req, res) => {
-
+const activateEmpleadoByRut = async (req, res) => {
+    
     try {
-        
-        const { id } = req.params;
-    
-        await deleteEmpleadoByIdService(id);
-    
+
+        const { rut } = req.params;
+
+        await activateEmpleadoByRutService(rut);
+
         res.json({ msg: 'OK' });
 
     } catch (error) {
-
+        console.log(error);
         throw new Error(error);
-    
-    }
 
-};
-
-const activateEmpleadoById = async (req, res) => {
-
-    try {
-        
-        const { id } = req.params;
-    
-        await activateEmpleadoByIdService(id);
-    
-        res.json({ msg: 'OK' });
-
-    } catch (error) {
-
-        throw new Error(error);
-    
     }
 
 };
@@ -122,9 +125,9 @@ const activateEmpleadoById = async (req, res) => {
 module.exports = {
     empleadosGet,
     createEmpleado,
-    updateEmpleadoById,
-    deleteEmpleadoById,
+    updateEmpleadoByRut,
+    deleteEmpleadoByRut,
     empleadosGetByCampo,
-    activateEmpleadoById
-    
+    activateEmpleadoByRut
+
 }

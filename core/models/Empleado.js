@@ -1,53 +1,35 @@
 const { Schema, model } = require('mongoose');
 
-const message = 'Es requerido';
-
 const EmpleadoSquema = Schema({
     Id: {
         type: Number
     },
     Rut: {
-        type: String,
-        required: [true, `rut ${message}`]
-
+        type: String
     },
     Nombre: {
-        type: String,
-        required: [true, `nombre ${message}`]
-
+        type: String
     },
     ApellidoMaterno: {
-        type: String,
-        required: [true, `apellidoMaterno ${message}`]
-
+        type: String
     },
     ApellidoPaterno: {
-        type: String,
-        required: [true, `apellidoPaterno ${message}`]
-
+        type: String
     },
     Correo: {
-        type: String,
-        required: [true, `correo ${message}`]
-
+        type: String
     },
     Telefono: {
-        type: String,
-        required: [true, `telefono ${message}`]
-
+        type: String
     },
     Contrasenia: {
-        type: String,
-        required: [true, `contrasenia ${message}`]
-
+        type: String
     },
     EstadoEmpleado: {
-        type: Number,
-        required: [true, `contrasenia ${message}`]
+        type: Number
     },
     Rol: {
-        type: Number,
-        required: [true, `contrasenia ${message}`]
+        type: Number
     }
 
 });
