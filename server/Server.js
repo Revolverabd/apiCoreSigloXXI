@@ -35,7 +35,7 @@ class Server {
 
         this.app.use(this.authPath, require('../routes/auth.route'));
         this.app.use(this.empleadosPath, require('../routes/empleado.route'));
-        this.app.use(this.mesasPath, require('../routes/mesas.route'));
+        this.app.use(this.mesasPath, require('../routes/mesa.route'));
     }
 
     listen() {

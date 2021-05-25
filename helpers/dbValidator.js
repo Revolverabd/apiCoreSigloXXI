@@ -9,6 +9,9 @@ const {
     getRutStateEmpleado
 } = require("../core/infrastructure/dataBase/daoEmpleadodb");
 
+
+// EMPLEADOS
+
 // validaciones con RUT
 const rutExists = async (rut) => {
 
@@ -133,6 +136,7 @@ const idEmpleadoExists = async (id) => {
 
 }
 
+// MESAS
 
 module.exports = {
     roleExists,
