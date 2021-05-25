@@ -1,4 +1,4 @@
-const { 
+const {
     isValidLogin,
     generateJWT
 } = require('../helpers');
@@ -13,9 +13,9 @@ const login = async (req, res) => {
         // verificar si las credencial correo es correctas
         // verificar si el usuario está activo
         // verifica si la contrasenia corresponde
-        const validate = await isValidLogin(Correo, Contrasenia);
+        const { idDb: Id, RolDb:Rol, nombreDb:Nombre, apePaDb:Apellido } = await isValidLogin(Correo, Contrasenia);
 
-        if (!validate) {
+        if (!Id) {
 
             return res.status(400).json({
                 msg: 'Usuario / Contraseña no son correctos'
@@ -24,12 +24,17 @@ const login = async (req, res) => {
         } else {
 
             // generar el JWT
-            const token = await generateJWT(validate);
+            const token = await generateJWT(Id);
 
             console.log(token);
 
             res.json({
+                ok:true,
                 msg: 'OK',
+                Rol,
+                Id,
+                Nombre,
+                Apellido,
                 token
             });
         }

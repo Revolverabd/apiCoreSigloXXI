@@ -10,6 +10,7 @@ class Server {
         this.port = process.env.PORT;
         this.authPath = '/api/auth';
         this.empleadosPath = '/api/empleados';
+        this.mesasPath = '/api/mesas';
 
         //Middlewares
         this.middlewares();
@@ -34,6 +35,7 @@ class Server {
 
         this.app.use(this.authPath, require('../routes/auth.route'));
         this.app.use(this.empleadosPath, require('../routes/empleado.route'));
+        this.app.use(this.mesasPath, require('../routes/mesas.route'));
     }
 
     listen() {

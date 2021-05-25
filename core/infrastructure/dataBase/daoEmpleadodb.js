@@ -170,7 +170,7 @@ const saveEmpleadodb = async (empleado) => {
 
 }
 
-const updateEmpleadodb = async (empleado, id) => {
+const updateEmpleadodb = async (empleado, rut) => {
 
     try {
 
@@ -181,32 +181,29 @@ const updateEmpleadodb = async (empleado, id) => {
             Correo,
             Telefono,
             Contrasenia,
-            EstadoEmpleado,
             Rol
         } = empleado;
 
         sql = `BEGIN SP_ACTUALIZAREMPLEADO(
-            :id,
+            :rut,
             :Nombre,
             :ApellidoMaterno,
             :ApellidoPaterno,
             :Correo,
             :Telefono,
             :Contrasenia,
-            :EstadoEmpleado,
             :Rol
             ); END;`
 
         await runQuery(sql,
             [
-                id,
+                rut,
                 Nombre,
                 ApellidoMaterno,
                 ApellidoPaterno,
                 Correo,
                 Telefono,
                 Contrasenia,
-                EstadoEmpleado,
                 Rol
             ], true);
 
@@ -301,10 +298,9 @@ const getIdEmpleado = async (id) => {
 
 const getCorreoAndStateEmpleado = async (correo) => {
 
-
     try {
 
-        sql = `BEGIN SP_GETCORREOSTATEEMPLEADO(:correo, :resultCorreo, :resultState, :resultContrasenia, :resultId); END;`;
+        sql = `BEGIN SP_GETCORREOSTATEEMPLEADO(:correo, :resultCorreo, :resultState, :resultContrasenia, :resultId, :resultRol, :resultNombre, :resultApePa); END;`;
 
         const result = await runQuery
             (sql,
@@ -314,21 +310,29 @@ const getCorreoAndStateEmpleado = async (correo) => {
                     resultState: { dir: oracledb.BIND_OUT, type: oracledb.NUMBER },
                     resultContrasenia: { dir: oracledb.BIND_OUT, type: oracledb.STRING },
                     resultId: { dir: oracledb.BIND_OUT, type: oracledb.STRING },
+                    resultRol: { dir: oracledb.BIND_OUT, type: oracledb.NUMBER },
+                    resultNombre: { dir: oracledb.BIND_OUT, type: oracledb.STRING },
+                    resultApePa: { dir: oracledb.BIND_OUT, type: oracledb.STRING },
                 },
                 false
             );
-
 
         const correoDb = result.outBinds.resultCorreo;
         const stateDb = result.outBinds.resultState;
         const contraseniaDb = result.outBinds.resultContrasenia;
         const idDb = result.outBinds.resultId;
+        const RolDb = result.outBinds.resultRol;
+        const nombreDb = result.outBinds.resultNombre;
+        const apePaDb = result.outBinds.resultApePa;
 
         const resultConsult = {
             correoDb,
             stateDb,
             contraseniaDb,
-            idDb
+            idDb,
+            RolDb,
+            nombreDb,
+            apePaDb
         }
 
         return resultConsult;

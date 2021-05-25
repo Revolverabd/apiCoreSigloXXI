@@ -6,9 +6,7 @@ const {
     getCorreoEmpleado,
     getIdEmpleado,
     getCorreoAndStateEmpleado,
-    // getRutEmpleado,
-    getRutStateEmpleado,
-    // getStateEmpleado
+    getRutStateEmpleado
 } = require("../core/infrastructure/dataBase/daoEmpleadodb");
 
 // validaciones con RUT
@@ -23,18 +21,29 @@ const rutExists = async (rut) => {
     }
 }
 
+const rutDoesNotExist = async (rut) => {
+
+    const { rutResult } = await getRutStateEmpleado(rut);
+
+    if (!rutResult) {
+
+        throw new Error(`Empleado con rut: ${rut} no existe`);
+
+    }
+}
+
 const rutDoesNotExistDeactivate = async (rut) => {
 
     const { rutResult, stateResult } = await getRutStateEmpleado(rut);
 
     if (!rutResult) {
-        throw new Error(`Empleado con rut: ${rut} no exite`);    
+        throw new Error(`Empleado con rut: ${rut} no exite`);
     }
-    
+
     if (stateResult != 1) {
         throw new Error(`Empleado con rut: ${rut} esta desactivado`);
     }
-    
+
 }
 
 const rutDoesNotExistActivate = async (rut) => {
@@ -42,9 +51,9 @@ const rutDoesNotExistActivate = async (rut) => {
     const { rutResult, stateResult } = await getRutStateEmpleado(rut);
 
     if (!rutResult) {
-        throw new Error(`Empleado con rut: ${rut} no exite`);    
+        throw new Error(`Empleado con rut: ${rut} no exite`);
     }
-    
+
     if (stateResult != 0) {
         throw new Error(`Empleado con rut: ${rut} ya esta activado`);
     }
@@ -86,7 +95,7 @@ const correoExists = async (correo) => {
 
 const isValidLogin = async (correo, contrasenia) => {
 
-    const { correoDb, stateDb, contraseniaDb, idDb } = await getCorreoAndStateEmpleado(correo);
+    const { correoDb, stateDb, contraseniaDb, idDb, RolDb, nombreDb, apePaDb } = await getCorreoAndStateEmpleado(correo);
 
     if (!contraseniaDb) {
         return false;
@@ -98,7 +107,14 @@ const isValidLogin = async (correo, contrasenia) => {
         return false;
     }
 
-    return idDb;
+    const objDatos = {
+        idDb,
+        RolDb,
+        nombreDb,
+        apePaDb
+    }
+
+    return objDatos;
 
 }
 
@@ -117,29 +133,6 @@ const idEmpleadoExists = async (id) => {
 
 }
 
-// const isDeleted = async (id) => {
-
-//     const stateDb = await getStateEmpleado(id);
-
-//     if (stateDb === 0) {
-
-//         throw new Error(`Empleado con id: ${id} eliminado`);
-
-//     }
-
-//     return stateDb;
-// }
-
-// const isActivated = async (id) => {
-
-//     const stateDb = await getStateEmpleado(id);
-
-//     if (stateDb === 1) {
-
-//         throw new Error(`Empleado con id: ${id} ya se encuentra activo`);
-
-//     }
-// }
 
 module.exports = {
     roleExists,
@@ -147,10 +140,10 @@ module.exports = {
     idEmpleadoExists,
     isValidLogin,
     rutExists,
+    rutDoesNotExist,
     rutDoesNotExistDeactivate,
     rutDoesNotExistActivate,
-    // isDeleted,
-    // isActivated
+
 }
 
 //colocar y probar los try catch
