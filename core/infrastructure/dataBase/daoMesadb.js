@@ -51,6 +51,67 @@ const getMesas = async () => {
 
 }
 
+const saveMesadb = async (mesa) => {
+
+    try {
+        const {
+            NumeroMesa,
+            CapacidadMesa,
+            IdEmpleado,
+            IdEstadoMesa
+        } = mesa;
+
+        sql = `CALL SP_CREARMESA
+        (
+            :NumeroMesa,
+            :CapacidadMesa,
+            :IdEmpleado,
+            :IdEstadoMesa
+            )`;
+
+        await runQuery(sql, [NumeroMesa, CapacidadMesa, IdEmpleado, IdEstadoMesa], true);
+
+    } catch (error) {
+        console.log(error);
+        throw new Error('Algo salió mal en la creación de la mesa');
+    }
+
+}
+
+const updateMesadb = async (mesa, numMesa) => {
+
+    try {
+
+        const {
+            CapacidadMesa,
+            IdEmpleado,
+            IdEstadoMesa
+        } = mesa;
+
+        sql = `BEGIN SP_ACTUALIZARMESA(
+                :numMesa, 
+                :CapacidadMesa,
+                :IdEmpleado,
+                :IdEstadoMesa
+                    ); END;`
+
+        await runQuery(sql,
+            [
+                numMesa,
+                CapacidadMesa,
+                IdEmpleado,
+                IdEstadoMesa
+            ], true);
+
+    } catch (error) {
+        console.log(error);
+        throw new Error('Algo salió mal al actuaizar una mesa');
+    }
+
+}
+
 module.exports = {
-    getMesas
+    getMesas,
+    saveMesadb,
+    updateMesadb
 }

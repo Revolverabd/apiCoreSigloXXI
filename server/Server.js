@@ -11,6 +11,7 @@ class Server {
         this.authPath = '/api/auth';
         this.empleadosPath = '/api/empleados';
         this.mesasPath = '/api/mesas';
+        this.insumosPath = '/api/insumos';
 
         //Middlewares
         this.middlewares();
@@ -36,6 +37,7 @@ class Server {
         this.app.use(this.authPath, require('../routes/auth.route'));
         this.app.use(this.empleadosPath, require('../routes/empleado.route'));
         this.app.use(this.mesasPath, require('../routes/mesa.route'));
+        this.app.use(this.insumosPath, require('../routes/insumo.route'));
     }
 
     listen() {

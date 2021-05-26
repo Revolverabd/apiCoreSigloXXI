@@ -1,7 +1,10 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 
-const { mesasGet } = require('../controllers/mesa.controller');
+const { 
+    mesasGet,
+    createMesa,
+    updateMesaByNumMesa } = require('../controllers/mesa.controller');
 
 const router = Router();
 
@@ -10,6 +13,16 @@ router.get('/all',[
     // isAdminRol,
 ], mesasGet);
 
+router.post('/add', [
+    // validateJWT,
+    // isAdminRol,
+], createMesa);
 
+router.put('/upd/:numMesa', [
+    // validateJWT,
+    // isAdminRol,
+], updateMesaByNumMesa);
 
 module.exports = router;
+
+//Falta validaciones

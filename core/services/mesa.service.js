@@ -1,4 +1,4 @@
-const { getMesas } = require("../infrastructure/dataBase/daoMesadb");
+const { getMesas, saveMesadb,updateMesadb } = require("../infrastructure/dataBase/daoMesadb");
 
 const mesasGetService =  async() =>{
 
@@ -14,8 +14,36 @@ const mesasGetService =  async() =>{
 
 }
 
+const createMesaService = async (body) => {
+
+    try {
+
+        await saveMesadb(body);
+
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);
+    }
+
+};
+
+const updateMesaByNumMesaService = async (body, numeroMesa) => {
+
+    try {
+
+        await updateMesadb(body, numeroMesa);
+
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);
+    }
+
+};
+
 module.exports = {
-    mesasGetService
+    mesasGetService,
+    createMesaService,
+    updateMesaByNumMesaService
 }
 
 

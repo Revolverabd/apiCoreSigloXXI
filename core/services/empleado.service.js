@@ -10,7 +10,6 @@ const {
     softActivateEmpleadodb
 } = require('../infrastructure/dataBase/daoEmpleadodb');
 
-
 const empleadosGetService = async () => {
 
     try {
@@ -22,7 +21,6 @@ const empleadosGetService = async () => {
         console.log(error);
         throw new Error();
     }
-
 
 };
 
