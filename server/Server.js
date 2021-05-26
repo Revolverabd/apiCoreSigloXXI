@@ -8,10 +8,16 @@ class Server {
     constructor() {
         this.app = express();
         this.port = process.env.PORT;
-        this.authPath = '/api/auth';
-        this.empleadosPath = '/api/empleados';
-        this.mesasPath = '/api/mesas';
-        this.insumosPath = '/api/insumos';
+
+        this.paths = {
+            auth: '/api/auth',
+            empleados: '/api/empleados',
+            // this.clientesPath = '/api/clientes';
+            mesas: '/api/mesas',
+            insumos: '/api/insumos',
+            recetas: '/api/recetas',
+            uploads: '/api/uploads'
+        }
 
         //Middlewares
         this.middlewares();
@@ -34,10 +40,13 @@ class Server {
 
     routes() {
 
-        this.app.use(this.authPath, require('../routes/auth.route'));
-        this.app.use(this.empleadosPath, require('../routes/empleado.route'));
-        this.app.use(this.mesasPath, require('../routes/mesa.route'));
-        this.app.use(this.insumosPath, require('../routes/insumo.route'));
+        this.app.use(this.paths.auth, require('../routes/auth.route'));
+        this.app.use(this.paths.empleados, require('../routes/empleado.route'));
+        this.app.use(this.paths.mesas, require('../routes/mesa.route'));
+        this.app.use(this.paths.insumos, require('../routes/insumo.route'));
+        this.app.use(this.paths.recetas, require('../routes/receta.route'));
+        this.app.use(this.paths.uploads, require('../routes/upload.route'));
+
     }
 
     listen() {
