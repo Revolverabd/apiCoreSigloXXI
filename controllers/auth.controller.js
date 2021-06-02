@@ -13,7 +13,7 @@ const login = async (req, res) => {
         // verificar si las credencial correo es correctas
         // verificar si el usuario está activo
         // verifica si la contrasenia corresponde
-        const { idDb: Id, RolDb:Rol, nombreDb:Nombre, apePaDb:Apellido } = await isValidLogin(Correo, Contrasenia);
+        const { idDb: Id, RolDb: Rol, nombreDb: Nombre, apePaDb: Apellido } = await isValidLogin(Correo, Contrasenia);
 
         if (!Id) {
 
@@ -29,7 +29,7 @@ const login = async (req, res) => {
             console.log(token);
 
             res.json({
-                ok:true,
+                ok: true,
                 msg: 'OK',
                 Rol,
                 Id,
@@ -51,6 +51,21 @@ const login = async (req, res) => {
 
 }
 
+const googleSignIn = (req, res) => {
+
+    const { Correo, googleId, Nombre, tokenId } = req.body;
+    console.log(req);
+    res.json({
+        msg: 'OK',
+        Correo,
+        googleId,
+        Nombre,
+        tokenId
+    })
+
+}
+
 module.exports = {
-    login
+    login,
+    googleSignIn
 }

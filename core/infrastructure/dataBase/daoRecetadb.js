@@ -47,6 +47,36 @@ const getRecetas = async () => {
 
 }
 
+const saveRecetadb = async (receta) => {
+
+    try {
+        const { Descripcion, IdProducto } = receta;
+
+        sql = `CALL SP_CREARRECETA(:Descripcion,:IdProducto)`;
+
+        await runQuery(sql, [Descripcion, IdProducto], true);
+
+    } catch (error) {
+        console.log(error);
+        throw new Error('Algo salió mal en la creación de la receta');
+    }
+}
+
+const updateRecetadb = async (receta, id) => {
+
+    try {
+        const { Descripcion, IdProducto } = receta;
+        sql = `BEGIN SP_ACTUALIZARRECETA(:id,:Descripcion,:IdProducto); END;`
+        await runQuery(sql, [id, Descripcion, IdProducto], true);
+    } catch (error) {
+        console.log(error);
+        throw new Error('Algo salió mal al actuaizar una receta');
+    }
+
+}
+
 module.exports = {
-    getRecetas
+    getRecetas,
+    saveRecetadb,
+    updateRecetadb
 }

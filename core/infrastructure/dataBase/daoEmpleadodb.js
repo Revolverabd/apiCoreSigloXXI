@@ -281,10 +281,10 @@ const getIdEmpleado = async (id) => {
             (sql,
                 {
                     id: { dir: oracledb.BIND_IN, type: oracledb.STRING, val: id },
-                    resultEmpleados: { dir: oracledb.BIND_OUT, type: oracledb.STRING },
+                    resultEmpleados: { dir: oracledb.BIND_OUT, type: oracledb.STRING }
                 },
-                false
-            );
+                false);
+                
         const idDb = result.outBinds.resultEmpleados;
         return idDb;
 

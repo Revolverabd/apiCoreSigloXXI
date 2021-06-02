@@ -1,4 +1,8 @@
-const { getRecetas } = require("../infrastructure/dataBase/daoRecetadb");
+const { 
+    getRecetas,
+    saveRecetadb,
+    updateRecetadb
+ } = require("../infrastructure/dataBase/daoRecetadb");
 
 const recetasGetService = async () => {
 
@@ -14,6 +18,30 @@ const recetasGetService = async () => {
 
 };
 
+const createRecetaService = async (body) => {
+
+    try {
+
+        await saveRecetadb(body);
+
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);
+    }
+
+};
+
+const updateRecetaByIdService = async (body, id) => {
+    try {
+        await updateRecetadb(body, id);
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);
+    }
+};
+
 module.exports = {
-    recetasGetService
+    recetasGetService,
+    createRecetaService,
+    updateRecetaByIdService
 }
