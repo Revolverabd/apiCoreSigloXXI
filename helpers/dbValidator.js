@@ -9,9 +9,16 @@ const {
     getRutStateEmpleado
 } = require("../core/infrastructure/dataBase/daoEmpleadodb");
 
+const {
+    getCorreoCliente
+} = require('../core/infrastructure/dataBase/daoCliente');
+
+const {
+    getNomImgProduct
+} = require('../core/infrastructure/dataBase/daoProducto');
+
 
 // EMPLEADOS
-
 // validaciones con RUT
 const rutExists = async (rut) => {
 
@@ -136,9 +143,57 @@ const idEmpleadoExists = async (id) => {
 
 }
 
+// CLIENTES
+const emailClienteExists = async (email) => {
+
+    try {
+
+        const resultConsult = await getCorreoCliente(email);
+        return resultConsult;
+
+    } catch (error) {
+
+        console.log(error);
+        throw new Error(`Error Servidor`);
+
+    }
+}
+
 // MESAS
 
+// IMGENES
+const imgProductExists = async (id) => {
+
+    try {
+
+        const resultConsult = await getNomImgProduct(id);
+        return resultConsult;
+
+    } catch (error) {
+
+        console.log(error);
+        throw new Error(`Error Servidor`);
+
+    }
+}
+
+
+/**
+ * Validacion de colecciones permitidas
+ **/
+
+const allowedCollections = (collection = '', collections = []) => {
+
+    const include = collections.includes(collection);
+    if (!include) {
+        throw new Error(`La coleccion ${collection} no es permitida`);
+    }
+    return true;
+}
+
+
 module.exports = {
+    //EMPLEADOS
     roleExists,
     correoExists,
     idEmpleadoExists,
@@ -147,6 +202,15 @@ module.exports = {
     rutDoesNotExist,
     rutDoesNotExistDeactivate,
     rutDoesNotExistActivate,
+
+    //CLIENTES
+    emailClienteExists,
+
+    allowedCollections,
+
+    imgProductExists
+
+
 
 }
 

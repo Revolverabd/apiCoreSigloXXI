@@ -2,7 +2,7 @@ const { Schema, model } = require('mongoose');
 
 const EmpleadoSquema = Schema({
     Id: {
-        type: Number
+        type: String
     },
     Rut: {
         type: String

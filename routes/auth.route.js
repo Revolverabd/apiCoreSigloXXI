@@ -18,7 +18,6 @@ router.post('/login',[
 
 router.post('/google',[
     check('tokenId','El tokenId es necesario').not().isEmpty(),
-    // check('Contrasenia','La contraseña es obligatoria').not().isEmpty(),
     validateFields
 ]
 , googleSignIn);

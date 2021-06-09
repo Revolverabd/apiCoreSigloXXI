@@ -1,22 +1,33 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
+const {
+    clientesGet,
+    deleteClienteByCorreo,
+    activateClienteBycorreo
+} = require('../controllers/cliente.controller');
 
 
 const router = Router();
 
-// router.get('/all',[
-//     // check('Correo','El correo es obligatorio').isEmail(),
-//     // check('Contrasenia','La contraseña es obligatoria').not().isEmpty(),
-//     // validateFields
-// ]
-// , clientesGet);
+router.get('/all', [
 
-// router.post('/add',[
-//     check('Correo','El correo es obligatorio').isEmail(),
-//     check('Contrasenia','La contraseña es obligatoria').not().isEmpty(),
-//     validateFields
-// ]
-// , createCliente);
+    // check('Contrasenia','La contraseña es obligatoria').not().isEmpty(),
+    // validateFields
+], clientesGet);
+
+router.delete('/del/:correo', [
+    // validateJWT,
+    // isAdminRol,
+    // check('rut').custom(rutDoesNotExistDeactivate),
+    // validateFields
+], deleteClienteByCorreo);
+
+router.put('/act/:correo', [
+    // validateJWT,
+    // isAdminRol,
+    // check('rut').custom(rutDoesNotExistActivate),
+    // validateFields
+], activateClienteBycorreo);
 
 
 

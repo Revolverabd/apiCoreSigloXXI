@@ -1,7 +1,9 @@
 const Producto = require('../models/Producto');
 
 const {
-    saveProductodb
+    saveProductodb,
+    saveImgProductdb,
+    updateImgProduct
 } = require("../infrastructure/dataBase/daoProducto");
 
 const createProductoService = async (body) => {
@@ -17,6 +19,30 @@ const createProductoService = async (body) => {
     }
 };
 
+const createImgProductService = async (id, name) => {
+
+
+    try {
+        await saveImgProductdb(id, name);
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);
+    }
+};
+
+const updateImgProductService = async (id, name) => {
+    try {
+
+        await updateImgProduct(id, name);
+
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);
+    }
+}
+
 module.exports = {
-    createProductoService
+    createProductoService,
+    createImgProductService,
+    updateImgProductService
 }

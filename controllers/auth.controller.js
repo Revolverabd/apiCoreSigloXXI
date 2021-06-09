@@ -1,8 +1,16 @@
 const {
     isValidLogin,
-    generateJWT
+    generateJWT,
+    googleVerify,
+
+    emailClienteExists
 } = require('../helpers');
 
+const {
+    createClienteService
+} = require('../core/services/cliente.service');
+
+const Cliente = require('../core/models/Cliente');
 
 const login = async (req, res) => {
 
@@ -51,17 +59,53 @@ const login = async (req, res) => {
 
 }
 
-const googleSignIn = (req, res) => {
+const googleSignIn = async (req, res) => {
 
-    const { Correo, googleId, Nombre, tokenId } = req.body;
-    console.log(req);
-    res.json({
-        msg: 'OK',
-        Correo,
-        googleId,
-        Nombre,
-        tokenId
-    })
+    const { tokenId } = req.body;
+
+    try {
+
+        const { name, picture, email } = await googleVerify(tokenId);
+
+        const data = {
+            name,
+            email,
+            picture,
+        }
+
+        let cliente = new Cliente(data);
+
+        let { emailDb, stateDb } = await emailClienteExists(email);
+
+        console.log(emailDb)
+
+        if (!emailDb) {
+            await createClienteService(cliente);
+        }
+
+        if (stateDb === 0) {
+            return res.status(401).json({
+                msg: 'Hable con el administrador, Cliente bloqueado'
+            });
+        }
+
+        // generar el JWT
+        const token = await generateJWT(cliente._id);
+        
+        console.log(token);
+
+        res.json({
+            msg:'OK',
+            id: cliente._id,
+            token
+        });
+
+    } catch (error) {
+
+        res.status(400).json({
+            msg: 'token de google no es valido'
+        });
+    }
 
 }
 
