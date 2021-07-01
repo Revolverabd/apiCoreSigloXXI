@@ -24,18 +24,6 @@ router.put('/upd/:id', [
     // isAdminRol,
 ], updateRecetaById);
 
-// router.delete('/del/:rut', [
-//     validateJWT,
-//     isAdminRol,
-//     check('rut').custom(rutDoesNotExistDeactivate),
-//     validateFields
-// ], deleteEmpleadoByRut);
 
-// router.put('/act/:rut', [
-//     validateJWT,
-//     isAdminRol,
-//     check('rut').custom(rutDoesNotExistActivate),
-//     validateFields
-// ], activateEmpleadoByRut);
 
 module.exports = router;

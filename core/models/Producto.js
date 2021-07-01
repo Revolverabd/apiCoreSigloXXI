@@ -13,6 +13,9 @@ const ProductoSquema = Schema({
     PrecioNeto: {
         type: Number
     },
+    Estado: {
+        type: Number
+    },
     IdCategoria: {
         type: Number
     }

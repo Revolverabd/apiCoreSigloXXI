@@ -1,7 +1,7 @@
 const Empleado = require('../models/Empleado');
 const { encryptContraseñia } = require('../common/encrypt');
 
-const { 
+const {
     getEmpleados,
     getEmpleadosCampo,
     saveEmpleadodb,
@@ -9,6 +9,8 @@ const {
     softDeleteEmpleadodb,
     softActivateEmpleadodb
 } = require('../infrastructure/dataBase/daoEmpleadodb');
+
+
 
 const empleadosGetService = async () => {
 
@@ -61,7 +63,7 @@ const updateEmpleadoByRutService = async (body, rut) => {
 
     try {
 
-        let empleado = new Empleado(body, rut);
+        let empleado = new Empleado(body);
 
         //encriptacion de la contraseña  
         empleado.Contrasenia = await encryptContraseñia(empleado.Contrasenia);
@@ -91,9 +93,7 @@ const deleteEmpleadoByRutService = async (rut) => {
 const activateEmpleadoByRutService = async (rut) => {
 
     try {
-
         await softActivateEmpleadodb(rut);
-
     } catch (error) {
         console.log(error);
         throw new Error(error);

@@ -41,8 +41,7 @@ const login = async (req, res) => {
                 msg: 'OK',
                 Rol,
                 Id,
-                Nombre,
-                Apellido,
+                Nombre: `${Nombre}  ${Apellido}`,
                 token
             });
         }
@@ -91,13 +90,16 @@ const googleSignIn = async (req, res) => {
 
         // generar el JWT
         const token = await generateJWT(cliente._id);
-        
+
         console.log(token);
 
         res.json({
-            msg:'OK',
+            msg: 'OK',
             id: cliente._id,
-            token
+            token,
+            name,
+            picture,
+            email
         });
 
     } catch (error) {
@@ -109,7 +111,24 @@ const googleSignIn = async (req, res) => {
 
 }
 
+const revalidateJWT = async (req, res) => {
+
+    const { stateDb: state, idDb: Id, rolDb: Rol, nombreDb: Nombre } = req.empleado;
+
+    const token = await generateJWT(Id);
+
+    res.json({
+        msg: 'OK',
+        state,
+        Id,
+        Rol,
+        token,
+        Nombre
+    });
+}
+
 module.exports = {
     login,
-    googleSignIn
+    googleSignIn,
+    revalidateJWT
 }

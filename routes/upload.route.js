@@ -33,10 +33,10 @@ router.put('/udpcloudinary/:id', [
     validateFields
 ], fileUpdateCloudinary);
 
-
 /**
  * Uso del servidor local
  */
+
 router.post('/:id/:collection', [
     validateFileUp,
     check('id', 'El id no es valido').isMongoId(),

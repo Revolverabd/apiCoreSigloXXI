@@ -7,6 +7,8 @@ class Server {
     constructor() {
         this.app = express();
         this.port = process.env.PORT;
+        // this.server = require('http').createServer(this.app);
+        // this.io = require('socket.io')(this.server);
 
         this.paths = {
             auth: '/api/auth',
@@ -16,7 +18,10 @@ class Server {
             insumos: '/api/insumos',
             recetas: '/api/recetas',
             productos:'/api/productos',
-            uploads: '/api/uploads'
+            uploads: '/api/uploads',
+            pedido:'/api/pedidos',
+            webpay:'/api/webpay',
+            pago:'/api/pago',
         }
 
         //Middlewares
@@ -55,6 +60,9 @@ class Server {
         this.app.use(this.paths.recetas, require('../routes/receta.route'));
         this.app.use(this.paths.productos, require('../routes/producto.route'));
         this.app.use(this.paths.uploads, require('../routes/upload.route'));
+        this.app.use(this.paths.pedido, require('../routes/pedido.route'));
+        this.app.use(this.paths.webpay, require('../routes/webpay'));
+        this.app.use(this.paths.pago, require('../routes/pago.route'));
 
     }
 

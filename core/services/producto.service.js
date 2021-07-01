@@ -3,13 +3,26 @@ const Producto = require('../models/Producto');
 const {
     saveProductodb,
     saveImgProductdb,
-    updateImgProduct
+    updateImgProduct,
+    getProductos,
+    updateProductodb,
+    deleteProductodb
 } = require("../infrastructure/dataBase/daoProducto");
+
+const productosGetService = async () => {
+
+    try {
+        const result = await getProductos();
+        return result;
+    } catch (error) {
+        console.log(error);
+        throw new Error();
+    }
+};
 
 const createProductoService = async (body) => {
 
     let producto = new Producto(body);
-
     try {
         const idDb = await saveProductodb(producto);
         return idDb;
@@ -19,6 +32,37 @@ const createProductoService = async (body) => {
     }
 };
 
+const updateProductoByIdService = async (body, id) => {
+
+    try {
+
+        let producto = new Producto(body);
+        await updateProductodb(producto, id);
+
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);
+    }
+
+};
+
+
+const deletePorductoByIdService = async (id) => {
+
+    try {
+
+        await deleteProductodb(id);
+
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);
+    }
+
+};
+
+/**
+ * Tratamientos de imagenes relacionadas con producto 
+ */
 const createImgProductService = async (id, name) => {
 
 
@@ -42,7 +86,10 @@ const updateImgProductService = async (id, name) => {
 }
 
 module.exports = {
+    productosGetService,
     createProductoService,
     createImgProductService,
-    updateImgProductService
+    updateImgProductService,
+    updateProductoByIdService,
+    deletePorductoByIdService
 }

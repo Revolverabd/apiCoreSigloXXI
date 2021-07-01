@@ -408,7 +408,7 @@ const getMiddlware = async (id) => {
 
     try {
 
-        sql = `BEGIN SP_GETMIDDLEWARE(:id, :resultState, :resultId, :resultRol); END;`;
+        sql = `BEGIN SP_GETMIDDLEWARE(:id, :resultState, :resultId, :resultRol, :resultNombre); END;`;
 
         const result = await runQuery
             (sql,
@@ -417,6 +417,7 @@ const getMiddlware = async (id) => {
                     resultState: { dir: oracledb.BIND_OUT, type: oracledb.NUMBER },
                     resultId: { dir: oracledb.BIND_OUT, type: oracledb.STRING },
                     resultRol: { dir: oracledb.BIND_OUT, type: oracledb.NUMBER },
+                    resultNombre: { dir: oracledb.BIND_OUT, type: oracledb.STRING}
                 },
                 false
             );
@@ -424,11 +425,13 @@ const getMiddlware = async (id) => {
         const stateDb = result.outBinds.resultState;
         const idDb = result.outBinds.resultId;
         const rolDb = result.outBinds.resultRol;
+        const nombreDb = result.outBinds.resultNombre;
 
         const resultConsult = {
             stateDb,
             idDb,
             rolDb,
+            nombreDb
         }
 
         return resultConsult;
@@ -440,7 +443,6 @@ const getMiddlware = async (id) => {
     }
 
 }
-
 
 module.exports = {
     getEmpleados,
@@ -458,4 +460,3 @@ module.exports = {
     getStateEmpleado,
     getMiddlware
 }
-
