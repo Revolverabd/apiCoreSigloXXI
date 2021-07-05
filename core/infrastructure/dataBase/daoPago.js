@@ -53,11 +53,11 @@ const savetransactdb = async (pago) => {
     console.log(pago)
 
     try {
-        const { fecha, idCliente, idEmpleado, total, numMesa } = pago;
+        const { fecha, emailCliente, idEmpleado, total, numMesa } = pago;
 
-        sql = `CALL SP_CREARPAGO(:fecha, :idCliente, :idEmpleado, :total, :numMesa)`;
+        sql = `CALL SP_CREARPAGO(:fecha, :emailCliente, :idEmpleado, :total, :numMesa)`;
 
-        await runQuery(sql, [fecha, idCliente, idEmpleado, total, numMesa], true);
+        await runQuery(sql, [fecha, emailCliente, idEmpleado, total, numMesa], true);
 
     } catch (error) {
         console.log(error);
@@ -65,7 +65,21 @@ const savetransactdb = async (pago) => {
     }
 }
 
+const finalTableDb = async (numMesa) => {
+
+    try {
+        sql = `BEGIN SP_FINALTABLE(:numMesa); END;`
+        await runQuery(sql, [numMesa], true);
+
+    } catch (error) {
+        console.log(error);
+        throw new Error('Algo salió mal en la eliminación');
+
+    }
+}
+
 module.exports = {
     savetransactdb,
-    getPagos
+    getPagos,
+    finalTableDb
 }

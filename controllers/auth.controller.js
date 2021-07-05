@@ -76,7 +76,7 @@ const googleSignIn = async (req, res) => {
 
         let { emailDb, stateDb } = await emailClienteExists(email);
 
-        console.log(emailDb)
+        // console.log(emailDb)
 
         if (!emailDb) {
             await createClienteService(cliente);
@@ -91,7 +91,7 @@ const googleSignIn = async (req, res) => {
         // generar el JWT
         const token = await generateJWT(cliente._id);
 
-        console.log(token);
+        // console.log(token);
 
         res.json({
             msg: 'OK',

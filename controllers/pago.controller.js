@@ -3,6 +3,8 @@ const {
     transactDbService
 } = require('../core/services/pago.service');
 
+const { finalTableDb } = require('../core/infrastructure/dataBase/daoPago');
+
 
 const pagosGet = async (req, res) => {
 
@@ -20,7 +22,7 @@ const pagosGet = async (req, res) => {
 };
 
 const transactDb = async (req, res) => {
-    
+
     try {
 
         const body = req.body;
@@ -36,10 +38,29 @@ const transactDb = async (req, res) => {
 
 };
 
+const finalTable = async (req, res) => {
+
+    try {
+
+        const { numMesa } = req.params;
+
+
+        await finalTableDb(numMesa);
+
+        res.json({ msg: 'OK' });
+
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);
+
+    }
+
+};
 
 
 
 module.exports = {
     pagosGet,
-    transactDb
+    transactDb,
+    finalTable
 }
